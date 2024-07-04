@@ -1,6 +1,6 @@
-import 'package:first_app/widgets/social_media_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'widgets/contacts_grid.dart';
 
 class MyContacts extends StatelessWidget {
   MyContacts({Key? key}) : super(key: key);
@@ -66,33 +66,7 @@ class MyContacts extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 //we no longer need expanded because we can scroll to the last element
-                GridView.builder(
-                  itemCount: socialMedia.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3),
-                  itemBuilder: (context, index) {
-                    return SocialMediaIcon(
-                        socialMedia: socialMedia.keys.toList()[index],
-                        socialMediaLink: socialMedia.values.toList()[index]);
-                    //index from 0 to itemCount
-                  },
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(8),
-                )
-
-                // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                //   SocialMediaIcon(socialMedia: 'icon'),
-                //   SocialMediaIcon(socialMedia: 'icon'),
-                //   SocialMediaIcon(socialMedia: 'icon'),
-
-                // ]),
-                // SizedBox(height: 30),
-                // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                //   SocialMediaIcon(socialMedia: 'icon'),
-                //   SocialMediaIcon(socialMedia: 'icon'),
-                //   SocialMediaIcon(socialMedia: 'icon'),
-                // ]),
+                GridWidget(socialMedia: socialMedia)
               ],
             ),
           ),
