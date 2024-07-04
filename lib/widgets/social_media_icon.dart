@@ -24,14 +24,18 @@ class SocialMediaIcon extends StatelessWidget {
           radius: 40,
         ),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => StartSocialMedia(
-                url: Uri.parse(socialMediaLink),
-              ),
-            ),
-          );
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.orange)),
+                    onPressed: () {
+                      launchUrl(Uri.parse(socialMediaLink),
+                          mode: LaunchMode.externalApplication);
+                    },
+                    child: Text('start $socialMedia'));
+              });
         },
       ),
     );
