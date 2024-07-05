@@ -1,3 +1,5 @@
+import 'package:first_app/my_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:first_app/widgets/social_media_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,14 +12,6 @@ class MyContacts extends StatefulWidget {
 }
 
 class _MyContactsState extends State<MyContacts> {
-  //I pass the function SetState over the widgets tree
-  void changeMyState(){
-    setState(() {
-      
-    });
-  }
-
-
 
   final Map<String, String> socialMedia = {
     'icon2.png': 'https://www.gammal.tech/',
@@ -43,22 +37,24 @@ class _MyContactsState extends State<MyContacts> {
             },
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: IconButton(
-                icon: myPlatform == null
-                    ? Icon(
-                        Icons.phone,
-                        size: 20,
-                        color: Colors.white,
-                      )
-                    : CircleAvatar(backgroundImage: AssetImage('assets/$myPlatform'), radius: 15,),//to make it like an icon
-                    //Image(image: AssetImage('assets/$myPlatform')),              
-                onPressed: () {
-                  myUrl == null
-                      ? launchUrl(Uri.parse('tel:+201021698769'))
-                      : launchUrl(myUrl!, mode: LaunchMode.externalApplication);
-                },
+            Consumer<MyProvider>(
+              builder: (context, value, child) => Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: IconButton(
+                  icon: value.myPlatform == null
+                      ? Icon(
+                          Icons.phone,
+                          size: 20,
+                          color: Colors.white,
+                        )
+                      : CircleAvatar(backgroundImage: AssetImage('assets/${value.myPlatform}'), radius: 15,),//to make it like an icon
+                      //I used the curly braces after the dollar sign because it normally reads only until the dot .              
+                  onPressed: () {
+                    value.myUrl == null
+                        ? launchUrl(Uri.parse('tel:+201021698769'))
+                        : launchUrl(value.myUrl!, mode: LaunchMode.externalApplication);
+                  },
+                ),
               ),
             ),
           ],
@@ -109,7 +105,7 @@ class _MyContactsState extends State<MyContacts> {
                   itemBuilder: (context, index) {
                     final String iconPath = socialMedia.keys.toList()[index];
                     Uri url = Uri.parse(socialMedia.values.toList()[index]);
-                    return SocialMediaIcon(socialMedia: iconPath, socialMediaLink: url, changeState: changeMyState);
+                    return SocialMediaIcon(socialMedia: iconPath, socialMediaLink: url);
                   },
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
