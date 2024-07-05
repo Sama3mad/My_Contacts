@@ -2,20 +2,81 @@ import 'package:first_app/widgets/social_media_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MyContacts extends StatelessWidget {
+class MyContacts extends StatefulWidget {
   MyContacts({Key? key}) : super(key: key);
+
+  @override
+  State<MyContacts> createState() => _MyContactsState();
+}
+
+class _MyContactsState extends State<MyContacts> {
   //List<String> social_media_icon = ['icon2.png', 'icon3.png', 'icon4.png'];
-  //List<String> social_media_link = ['https://www.gammal.tech/', 'https://www.instagram.com/sama_abu_zahra/', 'https://www.facebook.com/profile.php?id=100023848220867'];
   Map<String, String> socialMedia = {
     'icon2.png': 'https://www.gammal.tech/',
     'icon3.png': 'https://www.instagram.com/sama_abu_zahra/',
     'icon4.png': 'https://www.facebook.com/profile.php?id=100023848220867',
   };
+
   //we used that to solve the problem of making the social media icons static
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 5, 7, 30),
+          title:
+              Text('My Contact Screen', style: TextStyle(color: Colors.white)),
+          leading: GestureDetector(
+            child: Icon(
+              Icons.home,
+              color: Colors.white,
+            ),
+            onTap: () {
+              print('icon is pressed');
+            },
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.phone,
+                  size: 20,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  print('Icon is pressed');
+                  //launch('tel:+123456789');
+                  //'launch' is deprecated and shouldn't be used
+                  //so there is another new version of this function that is better to use
+                  launchUrl(Uri.parse('tel:+201021698769'));
+                },
+              ),
+            ),
+          ],
+        ),
+        // appBar: AppBar(
+        //   backgroundColor: Color.fromARGB(255, 5, 7, 30),
+        //   title:
+        //       Text('My Contact Screen', style: TextStyle(color: Colors.white)),
+        //   leading: GestureDetector(
+        //     child: Icon(
+        //       Icons.home,
+        //       color: Colors.white,
+        //     ),
+        //     onTap: () {
+        //       print('icon is pressed');
+        //     },
+        //   ),
+        //   actions: [
+        //     Padding(
+        //       padding: const EdgeInsets.only(right: 8.0),
+        //       child: IconButton(onPressed: (){} , icon: Icon(Icons.search), color: Colors.white,),
+        //       //Icon(Icons.home, color: Colors.white,),
+        //     ),
+        //   ],
+        //   //this is similar to the inkWell widget. They both make it clickable
+        // ),
         backgroundColor: Color.fromARGB(255, 5, 7, 30),
         body: SizedBox(
           width: double.infinity,
