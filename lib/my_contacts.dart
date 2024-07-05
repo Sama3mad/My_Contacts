@@ -1,3 +1,4 @@
+import 'package:first_app/widgets/social_media_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -9,9 +10,14 @@ class MyContacts extends StatefulWidget {
 }
 
 class _MyContactsState extends State<MyContacts> {
-  String? myPlatform;
+  //I pass the function SetState over the widgets tree
+  void changeMyState(){
+    setState(() {
+      
+    });
+  }
 
-  Uri? myUrl;
+
 
   final Map<String, String> socialMedia = {
     'icon2.png': 'https://www.gammal.tech/',
@@ -102,25 +108,8 @@ class _MyContactsState extends State<MyContacts> {
                       crossAxisCount: 3),
                   itemBuilder: (context, index) {
                     final String iconPath = socialMedia.keys.toList()[index];
-                    final String url = socialMedia.values.toList()[index];
-
-                    return Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: InkWell(
-                        child: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          backgroundImage: AssetImage('assets/$iconPath'),
-                          radius: 40,
-                        ),
-                        onTap: () {
-                          myPlatform = socialMedia.keys.toList()[index];
-                          myUrl = Uri.parse(socialMedia.values.toList()[index]);
-                          setState(() {});
-                          launchUrl(Uri.parse(url),
-                              mode: LaunchMode.externalApplication);
-                        },
-                      ),
-                    );
+                    Uri url = Uri.parse(socialMedia.values.toList()[index]);
+                    return SocialMediaIcon(socialMedia: iconPath, socialMediaLink: url, changeState: changeMyState);
                   },
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
