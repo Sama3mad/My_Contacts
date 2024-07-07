@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:first_app/widgets/social_media_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tuple/tuple.dart';
 
 class MyContacts extends StatefulWidget {
   MyContacts({Key? key}) : super(key: key);
@@ -12,7 +13,6 @@ class MyContacts extends StatefulWidget {
 }
 
 class _MyContactsState extends State<MyContacts> {
-
   final Map<String, String> socialMedia = {
     'icon2.png': 'https://www.gammal.tech/',
     'icon3.png': 'https://www.instagram.com/sama_abu_zahra/',
@@ -37,22 +37,29 @@ class _MyContactsState extends State<MyContacts> {
             },
           ),
           actions: [
-            Consumer<MyProvider>(
+            //the problem with using the selector here is that I can only select one member but here I used myPlatform and myUrl
+            Selector<MyProvider,Tuple2<String?,Uri?>>(
+              selector: (p0, p1) => Tuple2(p1.getMyPlatform(), p1.getMyUrl()),
               builder: (context, value, child) => Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: IconButton(
-                  icon: value.getMyPlatform() == null
+                  icon: value.item1 == null
                       ? Icon(
                           Icons.phone,
                           size: 20,
                           color: Colors.white,
                         )
-                      : CircleAvatar(backgroundImage: AssetImage('assets/${value.getMyPlatform()}'), radius: 15,),//to make it like an icon
-                      //I used the curly braces after the dollar sign because it normally reads only until the dot .              
+                      : CircleAvatar(
+                          backgroundImage:
+                              AssetImage('assets/${value.item1}'),
+                          radius: 15,
+                        ), //to make it like an icon
+                  //I used the curly braces after the dollar sign because it normally reads only until the dot .
                   onPressed: () {
-                    value.getMyUrl() == null
+                    value.item2 == null
                         ? launchUrl(Uri.parse('tel:+201021698769'))
-                        : launchUrl(value.getMyUrl()!, mode: LaunchMode.externalApplication);
+                        : launchUrl(value.item2!,
+                            mode: LaunchMode.externalApplication);
                   },
                 ),
               ),
@@ -73,11 +80,28 @@ class _MyContactsState extends State<MyContacts> {
                   radius: 100,
                 ),
                 SizedBox(height: 20),
-                Text('Sama Abu Zahra',
-                    style: TextStyle(
+                Consumer<MyProvider>(
+                    builder: (context, value, child) => ElevatedButton(
+                        onPressed: () {
+                          value.changeName();
+                          value.notifyListeners();
+                        },
+                        child: Text('Change Name'))),
+                Selector<MyProvider, String>(
+                  //when using the selector, the variable should be initialized not nullable
+                  selector: (p0, p1) => p1.name,
+                  builder: (context, value, child) {
+                    print('Name changed');
+                    return Text(
+                      value,
+                      style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -105,7 +129,8 @@ class _MyContactsState extends State<MyContacts> {
                   itemBuilder: (context, index) {
                     final String iconPath = socialMedia.keys.toList()[index];
                     Uri url = Uri.parse(socialMedia.values.toList()[index]);
-                    return SocialMediaIcon(socialMedia: iconPath, socialMediaLink: url);
+                    return SocialMediaIcon(
+                        socialMedia: iconPath, socialMediaLink: url);
                   },
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),

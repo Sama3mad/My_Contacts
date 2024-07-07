@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SocialMediaIcon extends StatefulWidget {
-  String socialMedia;
-  Uri socialMediaLink;
+  final String socialMedia;
+  final Uri socialMediaLink;
+
   SocialMediaIcon({
     super.key,
     required this.socialMedia,
@@ -23,24 +24,18 @@ class _SocialMediaIconState extends State<SocialMediaIcon> {
       builder: (context, value, child) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          //responds to the touch action as performed by the user
           child: CircleAvatar(
             backgroundColor: Colors.transparent,
             backgroundImage: AssetImage('assets/${widget.socialMedia}'),
             radius: 40,
           ),
-          onDoubleTap: (){
-            //value is of type MyProvider so it is what I will use to access the variables in the provider
+          onDoubleTap: () {
+            print("Double tapped!"); // Debugging line
             value.setMyPlatform(widget.socialMedia);
             value.setMyUrl(widget.socialMediaLink);
-            // value.myPlatform = widget.socialMedia;
-            // value.myUrl = widget.socialMediaLink;
-            value.notifyListeners();
-            //all the consumers of this provider will act in accordance to the change
           },
           onTap: () {
             launchUrl(widget.socialMediaLink, mode: LaunchMode.externalApplication);
-            //mode: LaunchMode.externalApplication to open it in browser
           },
         ),
       ),
