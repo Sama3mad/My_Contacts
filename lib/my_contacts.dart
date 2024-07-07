@@ -41,18 +41,18 @@ class _MyContactsState extends State<MyContacts> {
               builder: (context, value, child) => Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: IconButton(
-                  icon: value.myPlatform == null
+                  icon: value.getMyPlatform() == null
                       ? Icon(
                           Icons.phone,
                           size: 20,
                           color: Colors.white,
                         )
-                      : CircleAvatar(backgroundImage: AssetImage('assets/${value.myPlatform}'), radius: 15,),//to make it like an icon
+                      : CircleAvatar(backgroundImage: AssetImage('assets/${value.getMyPlatform()}'), radius: 15,),//to make it like an icon
                       //I used the curly braces after the dollar sign because it normally reads only until the dot .              
                   onPressed: () {
-                    value.myUrl == null
+                    value.getMyUrl() == null
                         ? launchUrl(Uri.parse('tel:+201021698769'))
-                        : launchUrl(value.myUrl!, mode: LaunchMode.externalApplication);
+                        : launchUrl(value.getMyUrl()!, mode: LaunchMode.externalApplication);
                   },
                 ),
               ),

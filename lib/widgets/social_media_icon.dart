@@ -31,8 +31,10 @@ class _SocialMediaIconState extends State<SocialMediaIcon> {
           ),
           onDoubleTap: (){
             //value is of type MyProvider so it is what I will use to access the variables in the provider
-            value.myPlatform = widget.socialMedia;
-            value.myUrl = widget.socialMediaLink;
+            value.setMyPlatform(widget.socialMedia);
+            value.setMyUrl(widget.socialMediaLink);
+            // value.myPlatform = widget.socialMedia;
+            // value.myUrl = widget.socialMediaLink;
             value.notifyListeners();
             //all the consumers of this provider will act in accordance to the change
           },
